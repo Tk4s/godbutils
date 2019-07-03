@@ -11,14 +11,14 @@ import (
 var RedisClient *redis.Pool
 
 // NewRedis 初始化Redis
-func NewRedis(redisHost, Password string, redisDB int) {
+func NewRedis(redisHost, Password string, redisDB int, network string) {
 
 	client := &redis.Pool{
 		MaxIdle:     50,
 		MaxActive:   0,
 		IdleTimeout: 180 * time.Second,
 		Dial: func() (redis.Conn, error) {
-			c, err := redis.Dial("tcp", redisHost)
+			c, err := redis.Dial(network, redisHost)
 			if err != nil {
 				return nil, err
 			}
