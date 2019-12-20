@@ -24,7 +24,7 @@ type dingTalk struct {
 
 type dingTalkBody struct {
 	MsgType    string                 `json:"msgtype"`
-	Text       map[string]string      `json:"text"`
+	Text       map[string]interface{} `json:"text"`
 	Link       map[string]string      `json:"link"`
 	MarkDown   map[string]string      `json:"mark_down"`
 	ActionCard map[string]string      `json:"action_card"`
@@ -106,7 +106,7 @@ func (d *dingTalk) send() error {
 
 }
 
-func (d *dingTalk) SendTextMsg(data map[string]string, at map[string]interface{}) error {
+func (d *dingTalk) SendTextMsg(data map[string]interface{}, at map[string]interface{}) error {
 	d.body.MsgType = "text"
 	d.body.Text = data
 	d.body.At = at
