@@ -70,7 +70,6 @@ func (d *dingTalk) send() error {
 		v.Add("timestamp", timeMillis)
 		v.Add("sign", sign)
 		v.Add("access_token", d.token)
-		fmt.Printf("%+v \n", d.body)
 		reader := bytes.NewReader(res)
 		request, err := http.NewRequest(http.MethodPost, d.uri, reader)
 		if err != nil {
