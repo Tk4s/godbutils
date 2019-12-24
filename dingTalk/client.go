@@ -26,13 +26,14 @@ type dingTalkBody struct {
 	MsgType    string                 `json:"msgtype"`
 	Text       map[string]interface{} `json:"text"`
 	Link       map[string]string      `json:"link"`
-	MarkDown   map[string]string      `json:"mark_down"`
-	ActionCard map[string]string      `json:"action_card"`
+	MarkDown   map[string]string      `json:"markdown"`
+	ActionCard map[string]string      `json:"actionCard"`
 	At         map[string]interface{} `json:"at"`
 }
 
 type dingTallResp struct {
-	ErrorCode int `json:"error_code"`
+	ErrorCode int    `json:"errcode"`
+	ErrorMsg  string `json:"errmsg"`
 }
 
 func mathSign(secretKey string) (string, string) {
@@ -69,7 +70,7 @@ func (d *dingTalk) send() error {
 		v.Add("timestamp", timeMillis)
 		v.Add("sign", sign)
 		v.Add("access_token", d.token)
-
+		fmt.Printf("%+v \n", d.body)
 		reader := bytes.NewReader(res)
 		request, err := http.NewRequest(http.MethodPost, d.uri, reader)
 		if err != nil {
@@ -91,12 +92,13 @@ func (d *dingTalk) send() error {
 			return err
 		}
 		var ret dingTallResp
+
 		if err := json.Unmarshal(respBytes, &ret); err != nil {
 			return fmt.Errorf("send dingTalk message failed, %v", err)
 		}
 
 		if ret.ErrorCode != 0 {
-			return fmt.Errorf("send dingTalk message failed with error code is not 0")
+			return fmt.Errorf("send dingTalk message failed with error code is not 0, %v", ret)
 		}
 
 		return nil
@@ -136,7 +138,7 @@ func (d *dingTalk) SendMarkDownMsg(data map[string]string, at map[string]interfa
 }
 
 func (d *dingTalk) SendActionCardMsg(data map[string]string, at map[string]interface{}) error {
-	d.body.MsgType = "markdown"
+	d.body.MsgType = "actionCard"
 	d.body.ActionCard = data
 
 	err := d.send()
