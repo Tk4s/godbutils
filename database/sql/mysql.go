@@ -15,16 +15,16 @@ type dbs struct {
 }
 
 type Config struct {
-	UserName  string
-	PassWord  string
-	Host      string
-	Port      int
-	DBName    string
-	Charset   string
-	ParseTime string
-	Loc       string
-	MaxIde    int
-	MaxOpen   int
+	Host      string `toml:"host"`
+	Port      int    `toml:"port"`
+	UserName  string `toml:"username"`
+	Password  string `toml:"password"`
+	Database  string `toml:"database"`
+	MaxIde    int    `toml:"max_ide"`
+	MaxOpen   int    `toml:"max_open"`
+	Charset   string `toml:"charset"`
+	ParseTime string `toml:"parse_time"`
+	Loc       string `toml:"loc"`
 }
 
 // DB 实例
@@ -36,7 +36,7 @@ func init() {
 }
 
 func InitInstanceWithName(instanceName string, cnf Config) {
-	sqlURL := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=%s&parseTime=%s&loc=%s", cnf.UserName, cnf.PassWord, cnf.Host, cnf.Port, cnf.Port, cnf.Charset, cnf.ParseTime, cnf.Loc)
+	sqlURL := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=%s&parseTime=%s&loc=%s", cnf.UserName, cnf.Password, cnf.Host, cnf.Port, cnf.Port, cnf.Charset, cnf.ParseTime, cnf.Loc)
 	db, err := gorm.Open("mysql", sqlURL)
 	if err != nil {
 		panic(err.Error())
