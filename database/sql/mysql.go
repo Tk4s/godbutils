@@ -14,6 +14,19 @@ type dbs struct {
 	Instances map[string]*gorm.DB
 }
 
+type Config struct {
+	UserName  string
+	PassWord  string
+	Host      string
+	Port      int
+	DBName    string
+	Charset   string
+	ParseTime string
+	Loc       string
+	MaxIde    int
+	MaxOpen   int
+}
+
 // DB 实例
 var DB *gorm.DB
 var DBs = &dbs{}
@@ -22,8 +35,8 @@ func init() {
 	DBs.Instances = make(map[string]*gorm.DB)
 }
 
-func InitInstanceWithName(instanceName, userName, passWord, host string, port int, dbName, charset, parseTime, loc string, maxIde, maxOpen int) {
-	sqlURL := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=%s&parseTime=%s&loc=%s", userName, passWord, host, port, dbName, charset, parseTime, loc)
+func InitInstanceWithName(instanceName string, cnf Config) {
+	sqlURL := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=%s&parseTime=%s&loc=%s", cnf.UserName, cnf.PassWord, cnf.Host, cnf.Port, cnf.Port, cnf.Charset, cnf.ParseTime, cnf.Loc)
 	db, err := gorm.Open("mysql", sqlURL)
 	if err != nil {
 		panic(err.Error())
@@ -35,8 +48,8 @@ func InitInstanceWithName(instanceName, userName, passWord, host string, port in
 		panic(err.Error())
 	}
 
-	db.DB().SetMaxIdleConns(maxIde)
-	db.DB().SetMaxOpenConns(maxOpen)
+	db.DB().SetMaxIdleConns(cnf.MaxIde)
+	db.DB().SetMaxOpenConns(cnf.MaxOpen)
 
 	DBs.Instances[instanceName] = db
 }
