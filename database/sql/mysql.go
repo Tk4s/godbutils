@@ -36,7 +36,7 @@ func init() {
 }
 
 func InitInstanceWithName(instanceName string, cnf Config) {
-	sqlURL := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=%s&parseTime=%s&loc=%s", cnf.UserName, cnf.Password, cnf.Host, cnf.Port, cnf.Port, cnf.Charset, cnf.ParseTime, cnf.Loc)
+	sqlURL := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=%s&parseTime=%s&loc=%s", cnf.UserName, cnf.Password, cnf.Host, cnf.Port, cnf.Database, cnf.Charset, cnf.ParseTime, cnf.Loc)
 	db, err := gorm.Open("mysql", sqlURL)
 	if err != nil {
 		panic(err.Error())
