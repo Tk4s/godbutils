@@ -1,4 +1,4 @@
-module godbutils
+module github.com/Tk4s/godbutils
 
 go 1.16
 
